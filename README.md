@@ -38,7 +38,7 @@ The relevance decision uses a section's heading and its first 1,000 characters, 
 
 ## My contribution and the team's work
 
-I worked with **Kayla Stevenson, Timothy Poteet, and Wyatt Phillips**. My work covered document parsing, prompts and summarization, the frontend, and integration. My teammates handled backend and database development. The application was our shared deliverable.
+I worked with three teammates. My work covered document parsing, prompts and summarization, the frontend, and integration. My teammates handled backend and database development. The application was our shared deliverable.
 
 | Area | My contribution |
 |---|---|
