@@ -1,0 +1,19 @@
+{
+  "title": "Solicitation document review",
+  "category": "Document processing & AI-assisted review",
+  "description": "A team capstone that parses solicitation documents, identifies relevant sections, and presents saved summaries for review.",
+  "repository_url": "https://github.com/eliasbrown99/Capstone",
+  "nav": [
+    [
+      "Overview",
+      "README.md"
+    ],
+    [
+      "Methods & limits",
+      "docs/METHODS.md"
+    ]
+  ],
+  "footer_note": "Team capstone: Elias Brown, Kayla Stevenson, Timothy Poteet, and Wyatt Phillips. Individual responsibilities are stated in the report. Presentation prepared with AI assistance.",
+  "markdown_format": "gfm-tex_math_dollars",
+  "repository_label": "Source repository"
+}
