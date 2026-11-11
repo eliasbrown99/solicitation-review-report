@@ -1,0 +1,28 @@
+{
+  "source_commit": "aa91149b093b438564d85b017198a2a2686ad2fe",
+  "snapshot_sha256": "0cf5e57e498536ebeda57235eb0215c1e9ec99e6d8281b027b289ff9b95f979e",
+  "scope": "Historical saved-output snapshot; not a labeled evaluation set or complete project corpus.",
+  "document_rows": 3,
+  "distinct_filenames": 3,
+  "section_summaries": 55,
+  "upload_date_range": [
+    "2025-04-21",
+    "2025-04-24"
+  ],
+  "top_level_bullets": {
+    "2": 2,
+    "3": 5,
+    "4": 9,
+    "5": 39
+  },
+  "all_bullet_lines": {
+    "2": 2,
+    "3": 4,
+    "4": 9,
+    "5": 39,
+    "6": 1
+  },
+  "summaries_with_nested_bullets": 1,
+  "empty_summaries": 0,
+  "definition": "A bullet line starts with -, *, \u2022, or a number plus . or ). Top-level lines have the smallest indentation within that summary. One observation is one stored section summary; output length is not accuracy."
+}

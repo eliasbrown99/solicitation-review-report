@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>How
-the document-review workflow selects and summarizes material · Elias Brown</title><meta name="description" content="A team capstone that parses solicitation documents, identifies relevant sections, and presents saved summaries for review.">
-<link rel="stylesheet" href="../report.58c509a4c14c.css"></head>
+the application selects, summarizes, and stores sections · Elias Brown</title><meta name="description" content="A team capstone connecting document parsing, relevant-section selection, concise summaries, and saved-result review, with an audit of preserved 2025 outputs.">
+<link rel="stylesheet" href="../report.36d88fd0d2bb.css"></head>
 <body><a class="skip" href="#main">Skip to content</a>
 <header class="masthead"><a class="identity" href="https://eliasbrown.io/">ELIAS BROWN <span>Selected analytical work</span></a><div class="masthead-links"><span class="discipline">Document processing &amp; AI-assisted review</span><a class="home-link" href="https://eliasbrown.io/">← Back to eliasbrown.io</a></div></header>
-<div class="projectbar"><a class="projectname" href="../index.html">Solicitation document review</a><nav class="site-nav" aria-label="Project"><a href="../index.html">Overview</a><a href="METHODS.html" aria-current="page">Methods &amp; limits</a><a href="https://github.com/eliasbrown99/Capstone">Source repository</a></nav></div>
+<div class="projectbar"><a class="projectname" href="../index.html">Solicitation document review</a><nav class="site-nav" aria-label="Project"><a href="../index.html">Overview</a><a href="EVIDENCE.html">Saved evidence</a><a href="METHODS.html" aria-current="page">Methods &amp; limits</a><a href="https://github.com/eliasbrown99/Capstone">Source repository</a></nav></div>
 <script>
 (() => {
   const bar = document.querySelector('.projectbar');
@@ -17,123 +17,175 @@ the document-review workflow selects and summarizes material · Elias Brown</tit
   else window.addEventListener('resize', updateHeaderHeight);
 })();
 </script>
-<div class="layout"><aside class="contents"><p class="eyebrow">ON THIS PAGE</p><nav aria-label="Sections"><a href="#parse-document-structure">Parse document structure</a><a href="#make-a-relevance-decision">Make a relevance decision</a><a href="#summarize-selected-sections">Summarize selected sections</a><a href="#connect-processing-to-the-application">Connect processing to the
-application</a><a href="#keep-the-claims-at-the-level-supported-by-the-work">Keep the
-claims at the level supported by the work</a></nav></aside>
-<main id="main"><article><h1
-id="how-the-document-review-workflow-selects-and-summarizes-material">How
-the document-review workflow selects and summarizes material</h1>
-<p><strong>Methods and limits · A source-based account of the team
+<div class="layout"><aside class="contents"><p class="eyebrow">ON THIS PAGE</p><nav aria-label="Sections"><a href="#recover-headings-then-flatten-the-document">Recover headings,
+then flatten the document</a><a href="#select-sections-using-a-bounded-excerpt">Select sections using a
+bounded excerpt</a><a href="#summarize-chunks-and-request-a-short-final-list">Summarize
+chunks and request a short final list</a><a href="#store-a-document-row-with-embedded-section-records">Store a
+document row with embedded section records</a><a href="#evaluate-each-stage-against-its-purpose">Evaluate each stage
+against its purpose</a></nav></aside>
+<main id="main"><article><h1 id="how-the-application-selects-summarizes-and-stores-sections">How
+the application selects, summarizes, and stores sections</h1>
+<p><strong>Methods &amp; limits · A source-based account of the 2025
 implementation</strong></p>
-<p>The application combines a document parser, several language-model
-steps, a backend, a database, and a review interface. Each stage changes
-the representation of the input, so a useful account needs to identify
-both what it produces and what it can leave out.</p>
-<h2 id="parse-document-structure">Parse document structure</h2>
-<p>The parsing component accepts PDF and Word documents and uses a
-document-parsing service to produce Markdown-like text. Its instructions
-emphasize headings, narrative text, lists, and tables while attempting
-to remove repeated document furniture such as titles or tables of
+<p>The application makes several decisions before a reviewer sees a
+digest. Understanding where text is transformed or excluded explains
+both the value of a focused summary and the risk of missing context.</p>
+<h2 id="recover-headings-then-flatten-the-document">Recover headings,
+then flatten the document</h2>
+<p>The parser accepts <code>.pdf</code>, <code>.doc</code>, and
+<code>.docx</code> files. LlamaParse returns Markdown-like text, guided
+by instructions to preserve headings, narrative text, lists, and tables
+while removing document furniture such as titles and tables of
 contents.</p>
-<p>The summarization component then finds heading lines and asks a
-language model whether they represent numbered or Roman-numeral
-sections. Headings that do not pass that check are treated as body text.
-The retained boundaries form a flat list of sections rather than a full
-nested document hierarchy.</p>
-<p>That is a deliberate representation of the document, not a guarantee
-that all source formatting is preserved. Unnumbered sections and
-ambiguous heading styles can affect where one section ends and another
-begins. <a
+<p>The section-processing code initially treats every Markdown heading
+level alike. A language-model prompt then asks whether each candidate
+has a numeric or Roman-numeral scheme. Unconfirmed headings are demoted
+to body text. Retained headings define a <strong>flat section
+list</strong>, rather than a nested hierarchy of parent sections and
+subsections.</p>
+<p>An unnumbered heading can therefore lose its role as a boundary
+without its text disappearing: it joins the surrounding body text. That
+can change the context used to assess relevance. The original slides
+recognize parser errors as a limitation, especially when their causes
+are difficult to correct.</p>
+<p>An isolated check of the two local section-building functions
+confirmed the flattening and body-text behavior with an invented input
+and an explicit simulated heading verdict. No model was called; this
+check does not estimate heading-recognition accuracy.</p>
+<p><a
 href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/parser.py">Parsing
 source</a> · <a
 href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/summarization.py">Section-processing
-source</a>.</p>
-<h2 id="make-a-relevance-decision">Make a relevance decision</h2>
-<p>For each section, the implementation sends its heading and the first
-1,000 characters of text to a relevance-classification step. An
-organization-specific capability description supplies the context. The
-reviewed code processes only sections that this step marks relevant.</p>
-<p>The excerpt keeps the selection input bounded. It can also miss a
-requirement that appears later in a long section. This means the result
-should be understood as a selected digest, not evidence that all
-requirements in the solicitation have been captured.</p>
-<p>The public report describes the mechanism without reproducing the
-organization-specific capability text or treating it as an independently
-verified description of that organization.</p>
-<h2 id="summarize-selected-sections">Summarize selected sections</h2>
-<p>Relevant sections are divided into text chunks using a configured
-size of 2,000 characters with 100 characters of overlap. Each chunk is
-summarized, the partial outputs are combined, and a final prompt
-requests no more than five bullets for the section.</p>
-<p>These settings describe the existing implementation. They are not
-presented as experimentally selected optimum values. The chunking and
-compression steps can lose context or omit detail, and a prompt
-instruction about length is not a measure of factual completeness.</p>
+source</a></p>
+<h2 id="select-sections-using-a-bounded-excerpt">Select sections using a
+bounded excerpt</h2>
+<p>For each section, a prompt receives the heading, the <strong>first
+1,000 characters</strong> of section text, and an organization-specific
+capability description. Only sections marked relevant continue to
+summarization. The 1,000-character limit concerns the selection excerpt,
+not the total amount of a selected section that can be summarized.</p>
+<p>This design can exclude a section whose important requirements appear
+after its opening excerpt. The prompt also discourages some
+administrative and legal material; such exclusions should not be
+interpreted as evidence that those clauses have no business importance.
+The result is a selected digest, not a complete compliance review.</p>
+<h2 id="summarize-chunks-and-request-a-short-final-list">Summarize
+chunks and request a short final list</h2>
+<p>Selected sections are split with a configured size of <strong>2,000
+characters</strong> and <strong>100 characters of overlap</strong>. Each
+chunk is summarized. The partial summaries are concatenated and passed
+through another prompt requesting at most five bullets for that
+section.</p>
+<p>These are character settings, not token counts or experimentally
+optimized values. The source configures <code>gpt-3.5-turbo</code> for
+heading refinement, relevance classification, and summarization. This
+describes the historical code; the report does not test the present
+availability or behavior of those service dependencies.</p>
+<p>The final bullet limit is a prompt instruction. No deterministic
+post-generation validator enforces it. The saved snapshot does meet the
+top-level limit, with the nested-bullet qualification discussed on the
+<a href="EVIDENCE.html">evidence page</a>.</p>
+<details class="method-note">
+<summary>Model calls in one document's processing path</summary>
+
+<p>Heading candidates each receive a refinement call, dispatched
+concurrently. Every constructed section then receives a relevance call.
+Each retained section receives one call per nonempty text chunk and a
+final condensation call when partial summaries exist. The slides'
+“two-pass” description captures selection followed by summarization; it
+is not a count of all calls made by the implementation.</p>
+</details>
+
+<h2 id="store-a-document-row-with-embedded-section-records">Store a
+document row with embedded section records</h2>
+<p>The async SQLAlchemy layer stores one row in the
+<code>summaries</code> table per successful upload. The four fields are
+an ID, filename, upload timestamp, and a text field containing a JSON
+list. Each element of that list has a section heading and its
+summary.</p>
+<p class="chart-guide"><strong>How to read the diagram:</strong> follow the arrows from the database row into its JSON payload and then to the displayed result. The one-to-many relationship is inside the JSON; sections are not a separate relational table.</p>
+
+<figure class="analysis-figure diagram-figure narrow-diagram">
+<img src="../_source/figures/storage.svg" alt="The summaries table contains id, filename, upload_time, and summary. The summary text field contains a list of heading and summary objects, displayed as section headings and bullets." />
+<figcaption><strong>What is saved—and available for review.</strong> The original schema retains the digest, but not source-page citations, original file contents, rejected sections, or model-run provenance. Source: database.py and main.py.</figcaption>
+</figure>
+
+<p>The backend supports retrieval and text search across filenames and
+serialized summary content, plus deletion by record ID. The frontend
+presents saved summaries in tabs with upload dates. My teammates
+developed the backend and database; my role included frontend behavior
+and integration with those components.</p>
+<h2
+id="separate-interface-intent-from-implementation-guarantees">Separate
+interface intent from implementation guarantees</h2>
+<p>The interface makes processing and persistence visible, but two
+details qualify the presentation's feature description.</p>
+<p><strong>Progress is a stage indicator.</strong> The UI animates
+toward fixed percentages for upload, parsing, identification,
+summarization, and storage. In the backend, identification and
+summarization events are emitted consecutively before the combined
+processing function runs. Those percentages are not measured fractions
+of completed analysis or reliable estimates of time remaining.</p>
+<p><strong>Duplicate replacement is incomplete in the reviewed
+source.</strong> A filename-check endpoint and confirmation dialog
+exist. However, the frontend joins the default API base and
+<code>document-exists</code> path without a separating slash, and the
+upload endpoint inserts a new row rather than replacing an existing one.
+The report therefore does not describe reliable overwrite handling as a
+verified capability. The original implementation was preserved during
+this report work.</p>
+<p>These findings come from source inspection and a local
+string-construction check. The application was not started, and no
+documents were sent to external services for this review.</p>
+<p><a
+href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/main.py">Backend
+source</a> · <a
+href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/database.py">Database
+source</a> · <a
+href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/solicitation-frontend/components/SolicitationDashboard.jsx">Frontend
+source</a></p>
+<h2 id="evaluate-each-stage-against-its-purpose">Evaluate each stage
+against its purpose</h2>
 <div class="table-wrap" role="region" aria-label="Data table" tabindex="0"><table>
 <thead>
 <tr>
 <th>Stage</th>
-<th>Output</th>
-<th>Question for evaluation</th>
+<th>Useful question</th>
+<th>Evidence available here</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Parsing</td>
-<td>Extracted document text</td>
-<td>Were tables, conditions, and headings retained accurately?</td>
-</tr>
-<tr>
-<td>Section construction</td>
-<td>Flat sections</td>
-<td>Do the boundaries preserve the intended context?</td>
+<td>Parsing and boundaries</td>
+<td>Are headings, tables, and conditions retained in the right
+context?</td>
+<td>Source plus qualitative presentation limitations</td>
 </tr>
 <tr>
 <td>Relevance selection</td>
-<td>Sections selected for summarization</td>
-<td>Were important requirements excluded?</td>
+<td>Does it retain important requirements, including those late in a
+section?</td>
+<td>Prompt and excerpt logic; no labeled recall estimate</td>
 </tr>
 <tr>
 <td>Summarization</td>
-<td>Concise bullets by section</td>
-<td>Are the bullets faithful, complete enough, and free of added
-claims?</td>
+<td>Are statements faithful and sufficiently complete?</td>
+<td>Saved summary structure and length; no independent quality
+scores</td>
 </tr>
 <tr>
-<td>User review</td>
-<td>A saved digest</td>
-<td>Can the reviewer confirm important statements against the
-source?</td>
+<td>Saved-result review</td>
+<td>Can a person retrieve and verify the digest?</td>
+<td>Implemented search/retrieval and historical UI screenshots; no
+page-level citations</td>
+</tr>
+<tr>
+<td>Practical use</td>
+<td>Does review become faster without losing important information?</td>
+<td>Team observations; no timed comparison</td>
 </tr>
 </tbody>
 </table></div>
-<p>This report does not include an independently labeled evaluation set
-or performance estimate for those stages.</p>
-<h2 id="connect-processing-to-the-application">Connect processing to the
-application</h2>
-<p>The backend provides an upload-processing route that streams progress
-messages and the final result. The database stores the filename, upload
-time, and structured summary payload. Additional routes retrieve,
-search, and delete saved summaries and check whether a filename is
-already present.</p>
-<p>The frontend uses those interfaces for the upload and review
-experience. My contribution covered parsing, prompts and summarization,
-frontend behavior, and integration; the backend and database were
-developed by teammates. <a
-href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/main.py">Backend
-source</a> · <a
-href="https://github.com/eliasbrown99/Capstone/blob/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e/app/database.py">Database
-source</a>.</p>
-<h2 id="keep-the-claims-at-the-level-supported-by-the-work">Keep the
-claims at the level supported by the work</h2>
-<p>The reviewed implementation supports a clear account of the
-processing sequence and application features. It does not establish
-accuracy on unseen solicitations, the absence of omitted requirements,
-or improved business decisions. The saved summary fields retain section
-headings and text, but do not provide page-level source citations.</p>
-<p>The report therefore presents the application as a capstone review
-tool. It preserves the technical choices and their implications without
-implying that generated summaries replace reading and evaluating the
-original document.</p>
-<p><a href="../index.html">Return to the project overview</a></p>
-</article><footer><strong>Elias Brown</strong><p>Team capstone: Elias Brown, Kayla Stevenson, Timothy Poteet, and Wyatt Phillips. Individual responsibilities are stated in the report. Presentation prepared with AI assistance.</p><a href="https://eliasbrown.io/">Personal website</a> · <a href="../index.html">Project overview</a> · <a href="#main">Back to top ↑</a></footer></main></div></body></html>
+<p><a href="../index.html">Return to the overview</a> · <a
+href="EVIDENCE.html">Review the saved-output findings</a></p>
+</article><footer><strong>Elias Brown</strong><p>Original May 2025 team capstone: Elias Brown, Kayla Stevenson, Timothy Poteet, and Wyatt Phillips. Contributions are stated in the report. November 2026 reading edition, aggregate audit, and figures prepared with AI assistance.</p><a href="https://eliasbrown.io/">Personal website</a> · <a href="../index.html">Project overview</a> · <a href="#main">Back to top ↑</a></footer></main></div></body></html>

@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>What the saved evidence
+shows · Elias Brown</title><meta name="description" content="A team capstone connecting document parsing, relevant-section selection, concise summaries, and saved-result review, with an audit of preserved 2025 outputs.">
+<link rel="stylesheet" href="../report.36d88fd0d2bb.css"></head>
+<body><a class="skip" href="#main">Skip to content</a>
+<header class="masthead"><a class="identity" href="https://eliasbrown.io/">ELIAS BROWN <span>Selected analytical work</span></a><div class="masthead-links"><span class="discipline">Document processing &amp; AI-assisted review</span><a class="home-link" href="https://eliasbrown.io/">← Back to eliasbrown.io</a></div></header>
+<div class="projectbar"><a class="projectname" href="../index.html">Solicitation document review</a><nav class="site-nav" aria-label="Project"><a href="../index.html">Overview</a><a href="EVIDENCE.html" aria-current="page">Saved evidence</a><a href="METHODS.html">Methods &amp; limits</a><a href="https://github.com/eliasbrown99/Capstone">Source repository</a></nav></div>
+<script>
+(() => {
+  const bar = document.querySelector('.projectbar');
+  const updateHeaderHeight = () => document.documentElement.style.setProperty(
+    '--projectbar-height', bar.getBoundingClientRect().height + 'px'
+  );
+  updateHeaderHeight();
+  if ('ResizeObserver' in window) new ResizeObserver(updateHeaderHeight).observe(bar);
+  else window.addEventListener('resize', updateHeaderHeight);
+})();
+</script>
+<div class="layout"><aside class="contents"><p class="eyebrow">ON THIS PAGE</p><nav aria-label="Sections"><a href="#compact-summaries-are-visible-in-the-stored-output">Compact
+summaries are visible in the stored output</a><a href="#keep-the-presentations-findings-at-their-supported-scope">Keep
+the presentation's findings at their supported scope</a><a href="#distinguish-the-later-demo-from-the-capstone">Distinguish the
+later demo from the capstone</a><a href="#reproduce-the-aggregate-check">Reproduce the aggregate
+check</a><a href="#what-would-establish-performance">What would establish
+performance</a></nav></aside>
+<main id="main"><article><h1 id="what-the-saved-evidence-shows">What the saved evidence
+shows</h1>
+<p><strong>Evidence review · Original presentation, implementation, and
+preserved outputs</strong></p>
+<p>The capstone produced an integrated review application and saved
+section summaries. The available records let us examine the shape of
+those outputs and check the presentation's description of the workflow.
+They do not establish how many important requirements the system missed
+or how much review time it saved.</p>
+<h2 id="compact-summaries-are-visible-in-the-stored-output">Compact
+summaries are visible in the stored output</h2>
+<p>An April 2025 database snapshot contains <strong>3 document records
+with distinct filenames and 55 section summaries</strong>. Its stored
+upload dates span April 21–24. All 55 summaries are nonempty and contain
+between two and five top-level bullets; 39 contain five.</p>
+<p>This supports the project's goal of producing concise, structured
+output. A short summary can still omit a condition or misstate a
+requirement, so output length should not be interpreted as factual
+accuracy.</p>
+<p class="chart-guide"><strong>How to read the chart:</strong> each bar counts section summaries with the indicated number of top-level bullets. A section summary is one observation; the 55 summaries come from only three saved document records.</p>
+
+<figure class="analysis-figure">
+<img class="chart-wide" src="../_source/figures/bullet-counts-wide.svg" alt="Top-level bullet counts across 55 saved summaries: two bullets in 2 summaries, three in 5, four in 9, and five in 39." />
+<img class="chart-mobile" src="../_source/figures/bullet-counts-mobile.svg" alt="Top-level bullet counts across 55 saved summaries: two bullets in 2 summaries, three in 5, four in 9, and five in 39." />
+<figcaption><strong>Most saved summaries use the requested five-bullet format.</strong> Counts are descriptive of the recovered snapshot. One summary contains three top-level bullets and three nested bullets; counting every bullet line would give six for that summary.</figcaption>
+</figure>
+
+<details class="method-note">
+<summary>See exact values and counting definitions</summary>
+
+<div class="table-wrap" role="region" aria-label="Data table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Top-level bullets</th>
+<th style="text-align: right;">Section summaries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td style="text-align: right;"><strong>55</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>One observation is one object in a stored document's summary list. A
+bullet line starts with a dash, asterisk, bullet symbol, or
+numbered-list marker. Top-level bullets have the smallest indentation
+within that summary. The audit also counts nested bullets separately,
+checks for empty summaries, and verifies that the distribution totals
+55. Distinct filenames are not a content-based deduplication rule.</p>
+</details>
+
+<p>The snapshot is preserved at commit
+<code>aa91149b093b438564d85b017198a2a2686ad2fe</code>, before the
+database was removed from the tracked tree. The summarization source at
+that point matches the reviewed main-branch version. That does not
+establish which exact code version produced every saved row. The
+database is not a complete run log and does not record model versions,
+input hashes, excluded sections, or evaluation labels.</p>
+<p><a href="../_source/analysis/derived/saved-output-audit.json">Download the
+aggregate audit</a> · <a
+href="../_source/scripts/audit_saved_outputs.py">Inspect the audit script</a> ·
+<a href="../_source/scripts/generate_figures.py">Inspect the figure
+script</a></p>
+<h2 id="keep-the-presentations-findings-at-their-supported-scope">Keep
+the presentation's findings at their supported scope</h2>
+<div class="table-wrap" role="region" aria-label="Data table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Original finding or figure</th>
+<th>Reading-edition treatment</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Section-based summaries and saved-results UI, slides 5–7</td>
+<td><strong>Retain</strong> the delivered workflow; redraw its
+connections</td>
+<td>Code, saved rows, and slide screenshots support implementation</td>
+</tr>
+<tr>
+<td>Five-bullet summaries, slides 3, 5, and 7</td>
+<td><strong>Recompute and specify</strong> top-level bullets in saved
+output</td>
+<td>All 55 have at most five top-level bullets; one has nested details;
+the code relies on prompts rather than a hard validator</td>
+</tr>
+<tr>
+<td>Reduced manual effort and useful summaries, slide 8</td>
+<td><strong>Retain as qualitative team observations</strong></td>
+<td>No timed comparison or independently labeled quality test was found
+in the reviewed evidence</td>
+</tr>
+<tr>
+<td>Dynamic extraction across formats, slide 7</td>
+<td><strong>Narrow to implemented handling</strong></td>
+<td>PDF/Word inputs are accepted, but heading refinement favors numbered
+and Roman-numeral titles</td>
+</tr>
+<tr>
+<td>RAG and fine-tuning diagrams, slide 4</td>
+<td><strong>Label as alternatives considered</strong></td>
+<td>These are not the architecture implemented in the final source</td>
+</tr>
+<tr>
+<td>Filename overwrite and progress, slides 6–7</td>
+<td><strong>Qualify in methods</strong></td>
+<td>The source has duplicate-check and progress limitations; UI intent
+is not proof of reliable behavior</td>
+</tr>
+<tr>
+<td>Decorative chart image, slide 8</td>
+<td><strong>Omit as analytical evidence</strong></td>
+<td>It is an illustration, not a chart of measured project results</td>
+</tr>
+<tr>
+<td>Proposal generation and fit classification, slide 9</td>
+<td><strong>Keep as future work</strong></td>
+<td>They are recommendations in the final presentation, not delivered
+2025 outcomes</td>
+</tr>
+</tbody>
+</table></div>
+<p>The presentation's screenshots remain useful historical evidence of
+the interface. They are not reproduced here because they contain
+document names and summary text. The reading edition uses diagrams and
+aggregate counts instead.</p>
+<h2 id="distinguish-the-later-demo-from-the-capstone">Distinguish the
+later demo from the capstone</h2>
+<p>The existing local Desktop checkout contains a later demo library of
+<strong>47 scripted documents, 188 sections, and 123 generated review
+records</strong> spanning 41 document IDs. Its generator intentionally
+assigns scenarios and reviewer ratings. The displayed <strong>75.6%
+agreement</strong> statistic therefore reflects those authored
+scenarios, not independent human validation of model predictions.</p>
+<p>The later local database contains 94 rows but only 47 distinct
+filenames. This is another reason not to treat its row count as the
+number of real opportunities reviewed. None of these later demo figures
+contributes to the 2025 output chart or a claim of measured
+accuracy.</p>
+<h2 id="reproduce-the-aggregate-check">Reproduce the aggregate
+check</h2>
+<p>The audit reads the historical database blob from a local source
+clone, writes it to a temporary directory, and queries that temporary
+copy read-only. It does not import the application, call a model,
+regenerate the demo, or alter the original database. The public
+aggregate contains no document names, section headings, or summary
+text.</p>
+<details class="code"><summary>View code</summary><div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> scripts/audit_saved_outputs.py <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--source-repo</span> /path/to/Capstone <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output-dir</span> analysis/derived</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">python3</span> scripts/generate_figures.py</span></code></pre></div></details>
+<p>The figure script uses Matplotlib for the distribution and creates
+source-based SVG diagrams. Raw inputs remain outside the website
+manifest. The current main-branch source and the local
+presentation/database files were fingerprinted during review; the
+originals were unchanged.</p>
+<h2 id="what-would-establish-performance">What would establish
+performance</h2>
+<p>A useful next study would label important requirements in source
+documents, including material the selection step rejects. It could then
+assess <strong>selection recall</strong>—the proportion of important
+material retained—and check whether each summary statement is supported
+by the source. A timed comparison with manual review would address the
+effort claim. Separate development and test documents would help prevent
+prompt tuning from becoming its own evaluation.</p>
+<p>These are proposed evaluation steps. They were not performed for this
+reading edition.</p>
+<p>Sources reviewed: the ten-slide <em>Acato 2 Capstone: Parsing
+Solicitation Documents Using Header-Based Language Modeling</em>,
+presented May 2, 2025; the <a
+href="https://github.com/eliasbrown99/Capstone/tree/c8105f820f062c6097f1a0a2d39d11cdb0bffb4e">pinned
+application source</a>; the historical saved-output snapshot; and the
+later local demo generator and saved JSON files. Only aggregate evidence
+is included in this report package.</p>
+<p><a href="../index.html">Return to the overview</a> · <a
+href="METHODS.html">Read the methods and implementation limits</a></p>
+</article><footer><strong>Elias Brown</strong><p>Original May 2025 team capstone: Elias Brown, Kayla Stevenson, Timothy Poteet, and Wyatt Phillips. Contributions are stated in the report. November 2026 reading edition, aggregate audit, and figures prepared with AI assistance.</p><a href="https://eliasbrown.io/">Personal website</a> · <a href="../index.html">Project overview</a> · <a href="#main">Back to top ↑</a></footer></main></div></body></html>

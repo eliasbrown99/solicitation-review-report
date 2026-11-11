@@ -28,15 +28,20 @@ html{scroll-padding-top:calc(var(--projectbar-height) + 1.5rem)}
 @media(max-width:900px){:root{--projectbar-height:10rem}}
 @media print{html{scroll-padding-top:0}}
 
-/* Reading-page diagrams: text stays readable when the layout narrows. */
-.process-flow{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0;margin:0 0 12px}
-.process-flow li{border:1px solid var(--line);background:var(--wash);padding:18px;margin:0;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.55}
-.step-label{font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--warm)}
-.process-flow strong{font-size:17px}.workflow figcaption{font-size:12px;line-height:1.6}
-.grain-example{display:grid;grid-template-columns:1fr auto 1fr auto 1fr auto 1fr;gap:12px;align-items:center;background:var(--wash);padding:20px;margin-bottom:12px}
-.grain-example div{display:flex;flex-direction:column;text-align:center;padding:10px;font-size:13px}.grain-example strong{font-size:23px;font-family:Georgia,serif;font-weight:400}.math-symbol{text-align:center;color:var(--warm);font-size:24px}
-.draft-badge{font-size:10px;letter-spacing:.08em;text-transform:uppercase;border:1px solid #8d7553;padding:4px 7px;color:#d3b784;white-space:nowrap}
-@media(max-width:650px){.process-flow{grid-template-columns:1fr}.process-flow li{padding:15px}.grain-example{display:flex;flex-direction:column;gap:0}.grain-example div{padding:5px}.math-symbol{line-height:1.1}.draft-badge{font-size:9px}.masthead-links{gap:6px}}
-@media print{.process-flow,.grain-example{break-inside:avoid}.draft-badge{display:none}}
+/* Optional reading-edition helpers: scale, explanations and responsive figures. */
+.preview-note{max-width:1200px;margin:0 auto;padding:13px 40px 0;color:var(--muted);font-size:11px;letter-spacing:.04em}
+.stat-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:30px 0 15px;padding:24px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stat-grid>div{display:flex;flex-direction:column;gap:8px}.stat-grid strong{font-family:Georgia,serif;font-size:38px;font-weight:400;color:var(--accent);line-height:1}.stat-grid span{font-size:12px;line-height:1.55;color:var(--muted)}
+.fine-print{font-size:12px;line-height:1.65;color:var(--muted)}
+.method-note{border:1px solid var(--line);margin:24px 0;font-size:14px;line-height:1.75}.method-note summary{cursor:pointer;padding:14px 18px;color:var(--accent);font-size:14px;background:var(--wash);font-weight:600}.method-note>p{padding:0 18px}.method-note>p:first-of-type{margin-top:18px}.method-note>.table-wrap{margin:16px}.method-note summary:hover{color:var(--ink)}
+.formula{padding:18px 20px;border-left:3px solid var(--accent);background:var(--wash);font-size:15px;margin:24px 0;line-height:1.7}
+.analysis-figure{margin:28px 0 30px}.analysis-figure img{width:100%;background:var(--paper);border:0;margin:0 0 15px}.analysis-figure .chart-mobile{display:none}.analysis-figure figcaption{line-height:1.7;font-size:12px}.analysis-figure figcaption strong{color:var(--ink)}
+.reader-note{border-left:3px solid var(--accent);background:var(--wash);padding:18px 22px;margin:28px 0;font-size:15px;line-height:1.7}.reader-note>strong{display:block;margin-bottom:7px}.reader-note p:last-child{margin-bottom:0}
+.chart-guide{font-size:15px;line-height:1.7;border-top:1px solid var(--line);padding-top:17px;color:var(--muted)}.chart-guide strong{color:var(--ink)}
+.diagram-figure{padding:18px 0 0;border-top:1px solid var(--line)}
+@media(max-width:1100px){.stat-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:24px}.analysis-figure .chart-wide{display:none}.analysis-figure .chart-mobile{display:block}.preview-note{padding-left:28px;padding-right:28px}}
+@media(max-width:650px){.preview-note{padding:12px 22px 0;font-size:10px}.stat-grid strong{font-size:35px}.stat-grid{gap:22px 15px}.method-note summary{padding:13px}.method-note>p{padding:0 13px}.formula{padding:15px;font-size:14px}.reader-note{padding:16px 18px}.chart-guide{font-size:14px}}
+@media print{.preview-note{display:none}.analysis-figure .chart-wide{display:block}.analysis-figure .chart-mobile{display:none}.stat-grid{grid-template-columns:repeat(4,1fr)}.analysis-figure{break-inside:avoid}}
 
-@media(min-width:651px) and (max-width:1100px){.grain-example{display:flex;flex-direction:column;gap:0}.grain-example div{padding:5px}.math-symbol{line-height:1.1}}
+/* Keep connected vertical diagrams readable without stretching. */
+.narrow-diagram{max-width:470px;margin-left:auto;margin-right:auto}
