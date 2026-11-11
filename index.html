@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reviewing
+solicitation documents by relevant section · Elias Brown</title><meta name="description" content="A team capstone that parses solicitation documents, identifies relevant sections, and presents saved summaries for review.">
+<link rel="stylesheet" href="report.58c509a4c14c.css"></head>
+<body><a class="skip" href="#main">Skip to content</a>
+<header class="masthead"><a class="identity" href="https://eliasbrown.io/">ELIAS BROWN <span>Selected analytical work</span></a><div class="masthead-links"><span class="discipline">Document processing &amp; AI-assisted review</span><a class="home-link" href="https://eliasbrown.io/">← Back to eliasbrown.io</a></div></header>
+<div class="projectbar"><a class="projectname" href="index.html">Solicitation document review</a><nav class="site-nav" aria-label="Project"><a href="index.html" aria-current="page">Overview</a><a href="docs/METHODS.html">Methods &amp; limits</a><a href="https://github.com/eliasbrown99/Capstone">Source repository</a></nav></div>
+<script>
+(() => {
+  const bar = document.querySelector('.projectbar');
+  const updateHeaderHeight = () => document.documentElement.style.setProperty(
+    '--projectbar-height', bar.getBoundingClientRect().height + 'px'
+  );
+  updateHeaderHeight();
+  if ('ResizeObserver' in window) new ResizeObserver(updateHeaderHeight).observe(bar);
+  else window.addEventListener('resize', updateHeaderHeight);
+})();
+</script>
+<div class="layout"><aside class="contents"><p class="eyebrow">ON THIS PAGE</p><nav aria-label="Sections"><a href="#follow-the-document-through-a-review-workflow">Follow the
+document through a review workflow</a><a href="#my-contribution">My contribution</a><a href="#select-before-summarizing">Select before summarizing</a><a href="#make-processing-and-saved-results-understandable">Make
+processing and saved results understandable</a><a href="#evidence-and-scope">Evidence and scope</a></nav></aside>
+<main id="main"><article><h1 id="reviewing-solicitation-documents-by-relevant-section">Reviewing
+solicitation documents by relevant section</h1>
+<p><strong>Elias Brown · Document parsing, AI summarization, React, and
+integration · Team capstone</strong></p>
+<p>Requests for information and proposals can contain long documents
+whose relevant requirements are spread across many sections. This
+capstone developed a review application that accepts a document,
+identifies sections relevant to an organization’s capabilities, and
+presents concise summaries that a person can review.</p>
+<p>My work covered document parsing, prompts and summarization, the
+frontend, and integration. I worked with <strong>Kayla Stevenson,
+Timothy Poteet, and Wyatt Phillips</strong>; backend and database
+responsibilities were handled by my teammates. The application described
+here is the team’s solution.</p>
+<h2 id="follow-the-document-through-a-review-workflow">Follow the
+document through a review workflow</h2>
+<p>The implementation connects PDF and Word-document parsing to section
+selection and summarization. It provides progress updates while
+processing and stores the resulting summaries for later retrieval. The
+frontend supports browsing and searching saved results and managing
+individual records.</p>
+<figure class="workflow"><ol class="process-flow"><li><span class="step-label">01</span><strong>Parse</strong><span>Convert a document to structured text.</span></li><li><span class="step-label">02</span><strong>Select</strong><span>Identify sections relevant to the review.</span></li><li><span class="step-label">03</span><strong>Summarize</strong><span>Condense selected sections into bullets.</span></li><li><span class="step-label">04</span><strong>Review</strong><span>Browse, search, and manage saved summaries.</span></li></ol><figcaption>A simplified view of the team application. This diagram contains no client documents or generated client summaries.</figcaption></figure>
+
+<p>The deliverable is an integrated document-review workflow. The
+repository provides evidence of that implementation, but this report
+does not claim a measured reduction in review time, classification
+accuracy, or commercial success.</p>
+<h2 id="my-contribution">My contribution</h2>
+<div class="table-wrap" role="region" aria-label="Data table" tabindex="0"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>My work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Document parsing</td>
+<td>Developed the document-to-text workflow and the instructions used to
+preserve useful structure</td>
+</tr>
+<tr>
+<td>Section selection and summarization</td>
+<td>Developed the prompts and processing sequence for identifying
+relevant material and condensing it</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>Developed the upload, progress, results, and saved-summary
+interfaces</td>
+</tr>
+<tr>
+<td>Integration</td>
+<td>Connected the document-processing workflow and user interface with
+the team’s backend and persistence layer</td>
+</tr>
+</tbody>
+</table></div>
+<p>My teammates handled backend and database development. This
+distinction matters because the application’s behavior depends on all of
+those parts working together.</p>
+<h2 id="select-before-summarizing">Select before summarizing</h2>
+<p>The processing sequence first interprets document headings and groups
+text into sections. It then evaluates relevance using a section’s
+heading and an initial excerpt, with an organization-specific capability
+description as context. Relevant sections are split when needed,
+summarized, and condensed into a small number of bullets.</p>
+<p>This choice focuses the output on material selected for review. It
+also creates an important limitation: a section excluded at the
+relevance stage does not appear in the final summary. The selection step
+therefore deserves as much attention as the quality of the summary
+text.</p>
+<p><a href="docs/METHODS.html">Read the processing methods and
+limits</a></p>
+<h2 id="make-processing-and-saved-results-understandable">Make
+processing and saved results understandable</h2>
+<p>The frontend exposes the stages of processing so that a user can
+distinguish parsing, section analysis, and saving. A saved result
+retains its filename, upload time, and section summaries. Users can
+search saved records and return to a particular result.</p>
+<p>The interface also checks whether a filename already exists before
+processing a new upload. That check supports a user decision about a
+possible repeat submission; it is not a content-based duplicate
+detector.</p>
+<h2 id="evidence-and-scope">Evidence and scope</h2>
+<p>The <a href="https://github.com/eliasbrown99/Capstone">public source
+repository</a> contains the parsing, summarization, service, and
+interface implementation. This reading edition describes the source as
+reviewed; the application was not executed and no documents were sent to
+a parsing or model service to produce the report.</p>
+<p>No client documents, client-generated summaries, or
+organization-specific capability statements are reproduced here. The
+report does not invent a demonstration result or treat a generated
+summary as a complete review of the original solicitation.</p>
+</article><footer><strong>Elias Brown</strong><p>Team capstone: Elias Brown, Kayla Stevenson, Timothy Poteet, and Wyatt Phillips. Individual responsibilities are stated in the report. Presentation prepared with AI assistance.</p><a href="https://eliasbrown.io/">Personal website</a> · <a href="index.html">Project overview</a> · <a href="#main">Back to top ↑</a></footer></main></div></body></html>
