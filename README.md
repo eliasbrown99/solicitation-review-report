@@ -1,46 +1,68 @@
-# Reviewing solicitation documents by relevant section
+# Turning long solicitations into a section-by-section review
 
-**Elias Brown · Document parsing, AI summarization, React, and integration · Team capstone**
+**Elias Brown · Parsing, AI summarization, React & integration · Team capstone, May 2025**
 
-Requests for information and proposals can contain long documents whose relevant requirements are spread across many sections. This capstone developed a review application that accepts a document, identifies sections relevant to an organization’s capabilities, and presents concise summaries that a person can review.
+A request for information or proposal asks a business to explain how it could meet a client's needs. The relevant work can be scattered across a long document, mixed with administrative clauses and inconsistent headings. Our capstone for Acato explored a practical question: **how can a reviewer find the sections that matter to a software quality-assurance business and return to them later?**
 
-My work covered document parsing, prompts and summarization, the frontend, and integration. I worked with **Kayla Stevenson, Timothy Poteet, and Wyatt Phillips**; backend and database responsibilities were handled by my teammates. The application described here is the team’s solution.
+We built an application that accepts PDF or Word documents, selects sections for relevance, produces concise summaries, and saves the results in a searchable interface. Its central design choice was to **select before summarizing**: focus the digest on potentially relevant work, while leaving the final assessment to a person.
 
-## Follow the document through a review workflow
+## What the team delivered
 
-The implementation connects PDF and Word-document parsing to section selection and summarization. It provides progress updates while processing and stores the resulting summaries for later retrieval. The frontend supports browsing and searching saved results and managing individual records.
+The project connected document parsing, language-model prompts, a FastAPI backend, SQLite storage, and a React/Next.js interface. The final presentation shows the upload view, an in-progress request, a saved section summary, and a searchable results database. The source implements those main paths.
 
-<figure class="workflow"><ol class="process-flow"><li><span class="step-label">01</span><strong>Parse</strong><span>Convert a document to structured text.</span></li><li><span class="step-label">02</span><strong>Select</strong><span>Identify sections relevant to the review.</span></li><li><span class="step-label">03</span><strong>Summarize</strong><span>Condense selected sections into bullets.</span></li><li><span class="step-label">04</span><strong>Review</strong><span>Browse, search, and manage saved summaries.</span></li></ol><figcaption>A simplified view of the team application. This diagram contains no client documents or generated client summaries.</figcaption></figure>
+<div class="stat-grid">
+<div><strong>3</strong><span>document records in the recovered April 2025 snapshot</span></div>
+<div><strong>55</strong><span>stored section summaries in those records</span></div>
+<div><strong>≤5</strong><span>top-level bullets in each saved section summary</span></div>
+<div><strong>4</strong><span>team members across processing, interface, and backend</span></div>
+</div>
 
-The deliverable is an integrated document-review workflow. The repository provides evidence of that implementation, but this report does not claim a measured reduction in review time, classification accuracy, or commercial success.
+<p class="fine-print">The snapshot is a small record of saved outputs, not the full project corpus or a labeled accuracy test. Counts were checked from preserved data for this reading edition; no new parsing or model calls were made.</p>
 
-## My contribution
+The result demonstrates an end-to-end review workflow and compact stored outputs. The presentation also reports that the tool reduced manual review effort and produced useful summaries. Those are the team's qualitative observations; the available evidence does not quantify time saved or establish the completeness of the summaries.
 
-| Area | My work |
+## Follow a document through the system
+
+The parser first turns the file into text with Markdown headings. The application checks section boundaries, selects material that appears relevant, and summarizes the selected sections. A saved digest can then be searched, reopened, or deleted.
+
+<p class="chart-guide"><strong>How to read the diagram:</strong> follow the arrows downward. Selection is a gate: a section rejected there does not appear in the final digest.</p>
+
+<figure class="analysis-figure diagram-figure narrow-diagram">
+<img src="figures/workflow.svg" alt="Five connected stages: upload and parse; build sections; select using a heading and the first 1,000 characters; summarize selected chunks; save and review." />
+<figcaption><strong>From document to saved digest.</strong> This diagram describes the implemented 2025 workflow. The five stages represent processing roles, not five model calls. Source: parser.py, summarization.py, main.py, and SolicitationDashboard.jsx at commit c8105f8.</figcaption>
+</figure>
+
+The relevance decision uses a section's heading and its first 1,000 characters, alongside a capability description. This bounds the text sent to that decision step. It also means a requirement appearing later in a long section may not influence whether the section is selected. That tradeoff is central to understanding the tool.
+
+[Explore the saved evidence](docs/EVIDENCE.md) · [Read the processing methods](docs/METHODS.md)
+
+## My contribution and the team's work
+
+I worked with **Kayla Stevenson, Timothy Poteet, and Wyatt Phillips**. My work covered document parsing, prompts and summarization, the frontend, and integration. My teammates handled backend and database development. The application was our shared deliverable.
+
+| Area | My contribution |
 |---|---|
-| Document parsing | Developed the document-to-text workflow and the instructions used to preserve useful structure |
-| Section selection and summarization | Developed the prompts and processing sequence for identifying relevant material and condensing it |
+| Document parsing | Developed the document-to-text workflow and instructions for extracting useful structure |
+| Relevance and summarization | Developed prompts and the processing sequence for selecting and condensing sections |
 | Frontend | Developed the upload, progress, results, and saved-summary interfaces |
-| Integration | Connected the document-processing workflow and user interface with the team’s backend and persistence layer |
+| Integration | Connected document processing and the interface to the team's backend and persistence layer |
 
-My teammates handled backend and database development. This distinction matters because the application’s behavior depends on all of those parts working together.
+## Why the project focused on summaries
 
-## Select before summarizing
+The presentation considers two broader approaches: retrieving prior material to draft responses, and fine-tuning a model to classify opportunities as a good fit, a poor fit, or a fit with partners. The team reported a limited response knowledge base and only 18 solicitations for the proposed classification approach.
 
-The processing sequence first interprets document headings and groups text into sections. It then evaluates relevance using a section’s heading and an initial excerpt, with an organization-specific capability description as context. Relevant sections are split when needed, summarized, and condensed into a small number of bullets.
+The delivered application instead uses existing language models through prompts to select and summarize sections. It does not train a new language model, implement the presentation's retrieval diagrams, or demonstrate automatic proposal generation. The 18-document figure describes the alternative discussed in the slides; it is not the denominator for the saved-output audit.
 
-This choice focuses the output on material selected for review. It also creates an important limitation: a section excluded at the relevance stage does not appear in the final summary. The selection step therefore deserves as much attention as the quality of the summary text.
+## What this work makes possible
 
-[Read the processing methods and limits](docs/METHODS.md)
+The application gives a reviewer a compact, reusable starting point for understanding an opportunity. Preserving section headings makes the output easier to navigate than an undifferentiated document summary, while persistence avoids treating every review as a one-time interaction.
 
-## Make processing and saved results understandable
+The next evaluation should test whether important requirements survive selection and compression, then measure review time against a manual workflow. Source-page citations and a view of excluded sections would help a person verify the digest. Proposal generation, fit classification, folders, and bulk actions were future-work ideas in the presentation.
 
-The frontend exposes the stages of processing so that a user can distinguish parsing, section analysis, and saving. A saved result retains its filename, upload time, and section summaries. Users can search saved records and return to a particular result.
+## About this reading edition
 
-The interface also checks whether a filename already exists before processing a new upload. That check supports a user decision about a possible repeat submission; it is not a content-based duplicate detector.
+This report combines the public implementation at **c8105f8**, all ten slides of the team's **May 2, 2025** final presentation, and an April 2025 database snapshot preserved in Git history. The review covered slide text and visuals; no audio or transcript was available. Original code, stored data, and presentation files were preserved.
 
-## Evidence and scope
+The later local demo includes scripted opportunities and generated reviewer decisions. It is identified separately on the evidence page and is not used to claim capstone accuracy or adoption. This November 2026 reading edition, aggregate audit, and explanatory figures were prepared with AI assistance.
 
-The [public source repository](https://github.com/eliasbrown99/Capstone) contains the parsing, summarization, service, and interface implementation. This reading edition describes the source as reviewed; the application was not executed and no documents were sent to a parsing or model service to produce the report.
-
-No client documents, client-generated summaries, or organization-specific capability statements are reproduced here. The report does not invent a demonstration result or treat a generated summary as a complete review of the original solicitation.
+[Original source repository](https://github.com/eliasbrown99/Capstone) · [Evidence, sources, and claim review](docs/EVIDENCE.md)

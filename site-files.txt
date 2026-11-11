@@ -1,2 +1,10 @@
 README.md
+docs/EVIDENCE.md
 docs/METHODS.md
+figures/workflow.svg
+figures/storage.svg
+figures/bullet-counts-wide.svg
+figures/bullet-counts-mobile.svg
+analysis/derived/saved-output-audit.json
+scripts/audit_saved_outputs.py
+scripts/generate_figures.py
